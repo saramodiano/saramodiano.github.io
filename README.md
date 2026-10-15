@@ -63,35 +63,6 @@ python3 -m http.server 4173
 
 Then open http://localhost:4173.
 
-## Deploying for free on GitHub Pages
-
-1. Create a new **public** GitHub repo (e.g. `your-portfolio`).
-2. Push this folder to it:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial portfolio"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/your-portfolio.git
-   git push -u origin main
-   ```
-3. On GitHub: **Settings → Pages → Source → Deploy from a branch → `main` / `(root)`**.
-4. Your site is live at `https://YOUR_USERNAME.github.io/your-portfolio/`
-   within a minute or two (free, forever, no credit card).
-
-### Using a real custom domain (optional, ~$10–15/year)
-
-GitHub Pages hosting stays free — you'd only ever pay a domain registrar
-(e.g. Namecheap, Cloudflare, Porkbun) for the name itself:
-
-1. Buy the domain from any registrar.
-2. In that repo's **Settings → Pages**, enter it under "Custom domain" —
-   GitHub creates a `CNAME` file for you automatically.
-3. At your registrar, add the DNS records GitHub's docs specify (an `A`
-   record set for apex domains, or a `CNAME` record for a `www` subdomain).
-4. Wait for DNS to propagate (minutes to a few hours), then enable "Enforce
-   HTTPS" in the same Pages settings.
-
 ## File structure
 
 ```
