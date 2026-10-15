@@ -1,11 +1,10 @@
 # Photography portfolio
 
-Plain HTML/CSS/JS — no build step, no framework. Free to host forever on GitHub Pages.
+Plain HTML/CSS/JS
 
 ## How the site is organized
 
-Work is grouped by **project**, not by fixed category — so a shoot never has to
-get sorted into a box that doesn't quite fit. Everything lives in `js/data.js`.
+Work is grouped by **project**. Everything lives in `js/data.js`.
 
 ### Adding a new project
 
