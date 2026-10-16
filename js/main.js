@@ -31,10 +31,20 @@
       const span = document.createElement("span");
       span.textContent = rotatorWords[rotatorIndex];
       rotatorInner.appendChild(span);
+
+      // slide up by exactly one line (matches the 1.05em span height in CSS)
       requestAnimationFrame(() => {
         rotatorInner.style.transition = "transform 0.5s cubic-bezier(.22,1,.36,1)";
-        rotatorInner.style.transform = `translateY(-${(rotatorInner.children.length - 1) * 100}%)`;
+        rotatorInner.style.transform = "translateY(-1.05em)";
       });
+
+      // once the slide finishes, drop the old word and reset instantly
+      // so the container never grows and the offset never drifts
+      setTimeout(() => {
+        rotatorInner.style.transition = "none";
+        rotatorInner.firstElementChild.remove();
+        rotatorInner.style.transform = "translateY(0)";
+      }, 520);
     }, 2600);
   }
 
