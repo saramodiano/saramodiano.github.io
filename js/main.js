@@ -299,51 +299,10 @@
   }, { threshold: 0.15 });
   revealEls.forEach((el) => observer.observe(el));
 
-  /* ---------- custom cursor ---------- */
-  const cursorDot = document.querySelector(".cursor-dot");
-  const cursorRing = document.querySelector(".cursor-ring");
   const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
 
-  if (hasFinePointer) {
-    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-    document.body.classList.add("cursor-ready");
-
-    window.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      cursorDot.style.left = mouseX + "px";
-      cursorDot.style.top = mouseY + "px";
-    });
-
-    function animateRing() {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      cursorRing.style.left = ringX + "px";
-      cursorRing.style.top = ringY + "px";
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-
-    // delegated hover so dynamically created links/buttons are covered too
-    document.addEventListener("mouseover", (e) => {
-      const target = e.target.closest("a, button");
-      if (target && !target.classList.contains("map-pin") && !target.classList.contains("project-card")) {
-        setCursorMode("link");
-      }
-    });
-    document.addEventListener("mouseout", (e) => {
-      const target = e.target.closest("a, button");
-      if (target && !target.classList.contains("map-pin") && !target.classList.contains("project-card")) {
-        setCursorMode("default");
-      }
-    });
-  }
-
-  function setCursorMode(mode) {
-    if (!cursorRing) return;
-    cursorRing.classList.remove("is-link", "is-view");
-    if (mode === "link") cursorRing.classList.add("is-link");
-    if (mode === "view") cursorRing.classList.add("is-view");
-  }
+  // no-op: gallery/map-pin hover handlers call this, but the site now uses the normal cursor
+  function setCursorMode() {}
 
   /* ---------- magnetic buttons ---------- */
   if (hasFinePointer) {
