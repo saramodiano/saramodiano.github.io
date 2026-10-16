@@ -61,8 +61,13 @@
     destination: document.getElementById("view-destination"),
   };
 
+  const aboutSection = document.getElementById("about");
+
   function showView(name) {
     Object.entries(views).forEach(([key, el]) => { el.hidden = key !== name; });
+    // About only shows on the projects overview (the "home" state of Work),
+    // not once you've drilled into an actual project, the map, or a destination.
+    aboutSection.hidden = name !== "projects";
   }
 
   /* ---------- lightbox-aware item grids ---------- */
@@ -316,6 +321,16 @@
       el.addEventListener("mouseleave", () => { el.style.transform = ""; });
     });
   }
+
+  /* ---------- nav: About always needs the projects view to be visible ---------- */
+  document.querySelector('a[href="#about"]').addEventListener("click", (e) => {
+    if (!aboutSection.hidden) return;
+    e.preventDefault();
+    showView("projects");
+    requestAnimationFrame(() => {
+      aboutSection.scrollIntoView({ behavior: "smooth" });
+    });
+  });
 
   /* ---------- init ---------- */
   renderProjectGrid();
