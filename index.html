@@ -27,22 +27,38 @@
 
 <main id="top">
 
-  <!-- ======= EDIT ME: HERO (the big intro text) ======= -->
-  <section class="hero">
-    <p class="hero-kicker" data-reveal>Photography &amp; Creativity</p>
-    <h1 class="hero-title" data-reveal>
-      I photograph <span class="hero-rotator"><span class="hero-rotator-inner"></span></span>
-    </h1>
-    <!-- the rotating words (people./places./moments...) are in js/data.js, search for rotatorWords -->
-    <p class="hero-sub" data-reveal>
-      Here's my portfolio to keep track of a few of the images I love.
-    </p>
-    <div class="hero-scroll" data-reveal>
-      <a href="#work" class="magnetic">See the work</a>
-      <span class="hero-scroll-line"></span>
+  <!-- ======= EDIT ME: ABOUT (intro — your bio + portrait photo, now the first thing visitors see) ======= -->
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="about-portrait" data-reveal>
+        <!-- swap this src for your real headshot whenever you have one -->
+        <img src="images/portrait.JPG" alt="Sara Ada portrait">
+      </div>
+      <div class="about-text" data-reveal>
+        <p class="hero-kicker">Photography &amp; Creativity</p>
+        <h1 class="hero-title">Sara Modiano</h1>
+        <p>
+          I'm a medical student living in NYC. I enjoy slowing down and seeing the world
+          through the lens of my camera–mostly the iPhone in my pocket, but sometimes, if I think ahead, my Canon.
+        </p>
+        <p>
+          Outside of photography, I enjoy cooking and baking in my mini-kitchenette,
+          and designing my small space. Most of the time, however, you can find me working in the hospital or studying.
+          I hope to be the kind of doctor that sees past a disease or diagnosis,
+          to capture a candid snapshot of the whole person in front of me.
+        </p>
+        <p class="about-note">
+          Before any of this, I studied Biological Engineering at MIT where I spent hours in the student pottery studio.
+          And before that, I filmed and edited lots of fun videos, including co-founding my high school's video channel.
+        </p>
+        <div class="hero-scroll">
+          <a href="#work" class="magnetic">See the work</a>
+          <span class="hero-scroll-line"></span>
+        </div>
+      </div>
     </div>
   </section>
-  <!-- ======= END HERO ======= -->
+  <!-- ======= END ABOUT ======= -->
 
   <!-- ======= WORK: this section's content comes from js/data.js (PROJECTS and TRAVEL), not here ======= -->
   <section class="work" id="work">
@@ -79,41 +95,14 @@
     </div>
   </section>
 
-  <!-- ======= EDIT ME: ABOUT (your bio + portrait photo) ======= -->
-  <section class="about" id="about">
-    <div class="about-grid">
-      <div class="about-portrait" data-reveal>
-        <!-- swap this src for your real headshot whenever you have one -->
-        <img src="images/portrait.JPG" alt="Sara Ada portrait placeholder">
-      </div>
-      <div class="about-text" data-reveal>
-        <h2>About</h2>
-        <p>
-          I'm <strong>Sara Modiano</strong> — a medical student living in NYC. 
-          I enjoy slowing down and seeing the world
-          through the lens of my camera–mostly the iPhone in my pocket, but sometimes, if I think ahead, my Canon.
-        </p>
-        <p>
-          Outside of photography, I enjoy cooking and baking in my mini-kitchenette,
-          and designing my small space. Most of the time, however, you can find me working in the hospital or studying. 
-          I hope to be the kind of doctor that sees past a disease or diagnosis, 
-          to capture a candid snapshot of the whole person in front of me.
-        </p>
-        <p class="about-note">
-          Before any of this, I studied Biological Engineering at MIT where I spent hours in the student pottery studio. 
-          And before that, I filmed and edited lots of fun videos, including co-founding my high school's video channel.
-        </p>
-      </div>
-    </div>
-  </section>
-  <!-- ======= END ABOUT ======= -->
-
   <!-- ======= EDIT ME: CONTACT (email + social links) ======= -->
   <section class="contact" id="contact">
-    <h2 data-reveal>Say hi</h2>
+    <h2 data-reveal>Get in touch</h2>
     <p data-reveal>Open to projects — or just reach out.</p>
-    <!-- change you@example.com to your real email, in BOTH places below -->
-    <a href="mailto:smodiano@alum.mit.edu" class="contact-email magnetic" data-reveal>smodiano@alum.mit.edu</a>
+    <!-- change the mailto address and aria-label/title to your real email -->
+    <a href="mailto:smodiano@alum.mit.edu" class="contact-email-icon magnetic" data-reveal aria-label="Email smodiano@alum.mit.edu" title="smodiano@alum.mit.edu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></svg>
+    </a>
     <div class="socials" data-reveal>
       <!-- change these # to your real profile links -->
       <a href="#" class="magnetic">Instagram</a>

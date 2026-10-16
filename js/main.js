@@ -20,34 +20,6 @@
   /* ---------- footer year ---------- */
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  /* ---------- hero word rotator ---------- */
-  const rotatorWords = ["people.", "places.", "moments.", "light.", "film."];
-  const rotatorInner = document.querySelector(".hero-rotator-inner");
-  let rotatorIndex = 0;
-  if (rotatorInner) {
-    rotatorInner.innerHTML = `<span>${rotatorWords[0]}</span>`;
-    setInterval(() => {
-      rotatorIndex = (rotatorIndex + 1) % rotatorWords.length;
-      const span = document.createElement("span");
-      span.textContent = rotatorWords[rotatorIndex];
-      rotatorInner.appendChild(span);
-
-      // slide up by exactly one line (matches the 1.05em span height in CSS)
-      requestAnimationFrame(() => {
-        rotatorInner.style.transition = "transform 0.5s cubic-bezier(.22,1,.36,1)";
-        rotatorInner.style.transform = "translateY(-1.05em)";
-      });
-
-      // once the slide finishes, drop the old word and reset instantly
-      // so the container never grows and the offset never drifts
-      setTimeout(() => {
-        rotatorInner.style.transition = "none";
-        rotatorInner.firstElementChild.remove();
-        rotatorInner.style.transform = "translateY(0)";
-      }, 520);
-    }, 2600);
-  }
-
   /* ---------- work section elements ---------- */
   const workTitle = document.getElementById("workTitle");
   const workSubtitle = document.getElementById("workSubtitle");
@@ -61,13 +33,8 @@
     destination: document.getElementById("view-destination"),
   };
 
-  const aboutSection = document.getElementById("about");
-
   function showView(name) {
     Object.entries(views).forEach(([key, el]) => { el.hidden = key !== name; });
-    // About only shows on the projects overview (the "home" state of Work),
-    // not once you've drilled into an actual project, the map, or a destination.
-    aboutSection.hidden = name !== "projects";
   }
 
   /* ---------- lightbox-aware item grids ---------- */
@@ -321,16 +288,6 @@
       el.addEventListener("mouseleave", () => { el.style.transform = ""; });
     });
   }
-
-  /* ---------- nav: About always needs the projects view to be visible ---------- */
-  document.querySelector('a[href="#about"]').addEventListener("click", (e) => {
-    if (!aboutSection.hidden) return;
-    e.preventDefault();
-    showView("projects");
-    requestAnimationFrame(() => {
-      aboutSection.scrollIntoView({ behavior: "smooth" });
-    });
-  });
 
   /* ---------- discourage casual image saving ----------
      Not foolproof (nothing on the web can be) — this just removes the
