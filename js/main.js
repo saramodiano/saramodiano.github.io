@@ -103,7 +103,7 @@
   function renderProjectGrid() {
     projectGrid.innerHTML = "";
 
-    const cards = PROJECTS.map((p) => ({
+    const cards = PROJECTS.filter((p) => !p.draft).map((p) => ({
       cover: p.cover,
       title: p.title,
       subtitle: p.subtitle,
