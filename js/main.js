@@ -332,6 +332,16 @@
     });
   });
 
+  /* ---------- discourage casual image saving ----------
+     Not foolproof (nothing on the web can be) — this just removes the
+     obvious right-click / drag-to-save path for casual visitors. */
+  document.addEventListener("contextmenu", (e) => {
+    if (e.target.tagName === "IMG") e.preventDefault();
+  });
+  document.addEventListener("dragstart", (e) => {
+    if (e.target.tagName === "IMG") e.preventDefault();
+  });
+
   /* ---------- init ---------- */
   renderProjectGrid();
   showProjects();
