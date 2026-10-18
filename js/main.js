@@ -69,6 +69,85 @@
     });
   }
 
+  /* ---------- slide deck (prev/next viewer, with optional B&W->color hover panels) ---------- */
+  const deckEl = document.getElementById("projectDeck");
+  const deckStage = document.getElementById("deckStage");
+  const deckCounter = document.getElementById("deckCounter");
+  const deckPrevBtn = document.getElementById("deckPrev");
+  const deckNextBtn = document.getElementById("deckNext");
+  let deckItems = [];
+  let deckIndex = 0;
+
+  function renderDeck(items) {
+    deckItems = items;
+    deckIndex = 0;
+    showDeckSlide();
+  }
+
+  function showDeckSlide() {
+    const item = deckItems[deckIndex];
+    deckStage.innerHTML = "";
+
+    if (item.hotspots && item.hotspots.length) {
+      deckStage.appendChild(buildPanel(item));
+    } else {
+      const img = document.createElement("img");
+      img.src = item.src;
+      img.alt = item.title;
+      deckStage.appendChild(img);
+    }
+
+    deckCounter.textContent = `${deckIndex + 1} / ${deckItems.length}`;
+  }
+
+  function buildPanel(item) {
+    const frame = document.createElement("div");
+    frame.className = "panel-frame";
+
+    const base = document.createElement("img");
+    base.className = "panel-base";
+    base.src = item.src;
+    base.alt = item.title;
+    frame.appendChild(base);
+
+    item.hotspots.forEach((h) => {
+      const d = Math.max(h.w, h.h); // circular porthole diameter, as a fraction of the frame
+
+      const hotspot = document.createElement("div");
+      hotspot.className = "panel-hotspot";
+      hotspot.style.left = `${(h.cx - d / 2) * 100}%`;
+      hotspot.style.top = `${(h.cy - d / 2) * 100}%`;
+      hotspot.style.width = `${d * 100}%`;
+      hotspot.style.height = `${d * 100}%`;
+      hotspot.setAttribute("tabindex", "0");
+      hotspot.setAttribute("aria-label", "Reveal color");
+
+      const lens = document.createElement("img");
+      lens.className = "panel-hotspot-img";
+      lens.src = item.src;
+      lens.alt = "";
+      lens.style.width = `${(1 / d) * 100}%`;
+      lens.style.height = `${(1 / d) * 100}%`;
+      lens.style.left = `${-((h.cx - d / 2) / d) * 100}%`;
+      lens.style.top = `${-((h.cy - d / 2) / d) * 100}%`;
+      hotspot.appendChild(lens);
+
+      hotspot.addEventListener("click", () => hotspot.classList.toggle("is-active"));
+      frame.appendChild(hotspot);
+    });
+
+    return frame;
+  }
+
+  deckPrevBtn.addEventListener("click", () => {
+    deckIndex = (deckIndex - 1 + deckItems.length) % deckItems.length;
+    showDeckSlide();
+  });
+  deckNextBtn.addEventListener("click", () => {
+    deckIndex = (deckIndex + 1) % deckItems.length;
+    showDeckSlide();
+  });
+
   /* ---------- projects overview ---------- */
   const projectGrid = document.getElementById("projectGrid");
 
@@ -153,7 +232,17 @@
     backBtn.hidden = false;
     backBtn.onclick = showProjects;
     setStory(projectStory, project.story);
-    renderItemsGrid(projectItemsGrid, project.items);
+
+    if (project.deck) {
+      projectItemsGrid.hidden = true;
+      deckEl.hidden = false;
+      renderDeck(project.items);
+    } else {
+      deckEl.hidden = true;
+      projectItemsGrid.hidden = false;
+      renderItemsGrid(projectItemsGrid, project.items);
+    }
+
     showView("project");
   }
 

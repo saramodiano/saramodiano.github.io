@@ -353,6 +353,91 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 }
 .grid-item:hover figcaption { opacity: 1; transform: translateY(0); }
 
+/* ---------- slide deck ---------- */
+.deck {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.deck-stage {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+.deck-stage img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.deck-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+.deck-nav {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  color: var(--ink-soft);
+  transition: border-color 0.25s, color 0.25s;
+}
+.deck-nav:hover { border-color: var(--accent); color: var(--accent); }
+.deck-counter {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+/* panel-frame: a deck slide with interactive black & white -> color hotspots */
+.panel-frame {
+  position: relative;
+  line-height: 0;
+}
+.panel-base {
+  filter: grayscale(1);
+}
+.panel-hotspot {
+  position: absolute;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85), 0 2px 14px rgba(0, 0, 0, 0.35);
+  animation: panelPulse 2.6s ease-in-out infinite;
+}
+.panel-hotspot-img {
+  position: absolute;
+  max-width: none;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.panel-hotspot:hover .panel-hotspot-img,
+.panel-hotspot:focus-visible .panel-hotspot-img,
+.panel-hotspot.is-active .panel-hotspot-img {
+  opacity: 1;
+}
+.panel-hotspot:hover,
+.panel-hotspot:focus-visible,
+.panel-hotspot.is-active {
+  animation: none;
+  box-shadow: 0 0 0 2px var(--accent), 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+@keyframes panelPulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85), 0 2px 14px rgba(0, 0, 0, 0.35); }
+  50% { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 2px 14px rgba(0, 0, 0, 0.2); }
+}
+@media (pointer: coarse) {
+  /* no hover on touch — tap toggles via the click handler, so just drop the pulse */
+  .panel-hotspot { animation: none; }
+}
+
 /* ---------- about ---------- */
 .about {
   min-height: 92vh;

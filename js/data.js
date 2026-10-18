@@ -10,7 +10,14 @@
     story    - a few sentences about the shoot, shown above the photos.
                Totally optional — leave it out (or set to "") and it just won't show.
     cover    - image shown on the project card
-    items    - array of { src, title } for everything in the gallery
+    deck     - optional: set to true to show this project as a slide-deck
+               viewer (prev/next + counter) instead of the usual photo grid.
+    items    - array of { src, title } for everything in the gallery.
+               An item can add `hotspots`: [{ cx, cy, w, h }] (each 0–1, as a
+               fraction of the image) to make it an interactive black-and-white
+               panel — hovering a hotspot reveals color in that circle. Get
+               these numbers by eye: cx/cy is the center, w/h is roughly how
+               much of the image width/height the color area should cover.
     draft    - set to true to hide this project from the live site entirely
                (card won't show). Delete this line, or set it to false, when
                it's ready to go public.
@@ -46,15 +53,45 @@ const PROJECTS = [
     slug: "narrative-medicine-spring-2026",
     title: "Narrative Medicine",
     subtitle: "Spring 2026",
-    draft: true, // no real photos added yet — delete this line when ready
-    // story: "Write a few lines here about this project — what drew you to it, and what you were hoping to capture about where medicine and story meet.",
-    cover: "images/work/narrative-medicine-01.svg",
+    story: "Inspired by David Hilliard's multi-panel panoramas, this series is about slowing down to notice the individual lives layered into a single New York City scene — made for a Narrative Medicine elective.",
+    cover: "images/work/narrative-medicine-01.jpg",
+    deck: true,
     items: [
-      { src: "images/work/narrative-medicine-01.svg", title: "Narrative Medicine — 01" },
-      { src: "images/work/narrative-medicine-02.svg", title: "Narrative Medicine — 02" },
-      { src: "images/work/narrative-medicine-03.svg", title: "Narrative Medicine — 03" },
-      { src: "images/work/narrative-medicine-04.svg", title: "Narrative Medicine — 04" },
-      { src: "images/work/narrative-medicine-05.svg", title: "Narrative Medicine — 05" },
+      { src: "images/work/narrative-medicine-01.jpg", title: "Narrative Medicine — 01" },
+      {
+        src: "images/work/narrative-medicine-02.jpg", title: "Narrative Medicine — 02",
+        hotspots: [
+          { cx: 0.5139, cy: 0.6529, w: 0.4421, h: 0.2936 },
+          { cx: 0.7933, cy: 0.6142, w: 0.4058, h: 0.2700 },
+        ],
+      },
+      {
+        src: "images/work/narrative-medicine-03.jpg", title: "Narrative Medicine — 03",
+        hotspots: [
+          { cx: 0.3054, cy: 0.6431, w: 0.6041, h: 0.4039 },
+        ],
+      },
+      {
+        src: "images/work/narrative-medicine-04.jpg", title: "Narrative Medicine — 04",
+        hotspots: [
+          { cx: 0.5410, cy: 0.2992, w: 0.6644, h: 0.4436 },
+        ],
+      },
+      { src: "images/work/narrative-medicine-05.jpg", title: "Narrative Medicine — 05" },
+      { src: "images/work/narrative-medicine-06.jpg", title: "Narrative Medicine — 06" },
+      { src: "images/work/narrative-medicine-07.jpg", title: "Narrative Medicine — 07" },
+      { src: "images/work/narrative-medicine-08.jpg", title: "Narrative Medicine — 08" },
+      { src: "images/work/narrative-medicine-09.jpg", title: "Narrative Medicine — 09" },
+      { src: "images/work/narrative-medicine-10.jpg", title: "Narrative Medicine — 10" },
+      { src: "images/work/narrative-medicine-11.jpg", title: "Narrative Medicine — 11" },
+      { src: "images/work/narrative-medicine-12.jpg", title: "Narrative Medicine — 12" },
+      { src: "images/work/narrative-medicine-13.jpg", title: "Narrative Medicine — 13" },
+      { src: "images/work/narrative-medicine-14.jpg", title: "Narrative Medicine — 14" },
+      { src: "images/work/narrative-medicine-15.jpg", title: "Narrative Medicine — 15" },
+      { src: "images/work/narrative-medicine-16.jpg", title: "Narrative Medicine — 16" },
+      { src: "images/work/narrative-medicine-17.jpg", title: "Narrative Medicine — 17" },
+      { src: "images/work/narrative-medicine-18.jpg", title: "Narrative Medicine — 18" },
+      { src: "images/work/narrative-medicine-19.jpg", title: "Narrative Medicine — 19" },
     ],
   },
   {
@@ -109,7 +146,7 @@ const TRAVEL = {
       items: [
         { src: "images/work/france-01.JPG", title: "Nice, France — 01" },
         { src: "images/work/france-02.jpeg", title: "Nice, France — 02" },
-        { src: "images/work/france-peaches.JPG", title: "Peaches" },
+        { src: "images/work/france-apricots.JPG", title: "Apricots" },
       ],
     },
     {
