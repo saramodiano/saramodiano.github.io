@@ -18,6 +18,10 @@
                panel — hovering a hotspot reveals color in that circle. Get
                these numbers by eye: cx/cy is the center, w/h is roughly how
                much of the image width/height the color area should cover.
+               An item can instead be { type: "panorama", src, title, hotspots:
+               [{ cx, cy, src, title }] } — a wide black-and-white base image
+               where each hotspot pops up a separate color photo on hover
+               (rather than revealing color within the base image itself).
     draft    - set to true to hide this project from the live site entirely
                (card won't show). Delete this line, or set it to false, when
                it's ready to go public.
@@ -81,7 +85,16 @@ const PROJECTS = [
       { src: "images/work/narrative-medicine-06.jpg", title: "Narrative Medicine — 06" },
       { src: "images/work/narrative-medicine-07.jpg", title: "Narrative Medicine — 07" },
       { src: "images/work/narrative-medicine-08.jpg", title: "Narrative Medicine — 08" },
-      { src: "images/work/narrative-medicine-09.jpg", title: "Narrative Medicine — 09" },
+      {
+        type: "panorama",
+        src: "images/work/narrative-medicine-panorama-base.jpg",
+        title: "Washington Square Park",
+        hotspots: [
+          { cx: 0.2406, cy: 0.55, src: "images/work/narrative-medicine-panorama-01.jpg", title: "Feeding the pigeons" },
+          { cx: 0.6255, cy: 0.55, src: "images/work/narrative-medicine-panorama-02.jpg", title: "Afternoon walk" },
+          { cx: 0.8319, cy: 0.55, src: "images/work/narrative-medicine-panorama-03.jpg", title: "People watching" },
+        ],
+      },
       { src: "images/work/narrative-medicine-10.jpg", title: "Narrative Medicine — 10" },
       { src: "images/work/narrative-medicine-11.jpg", title: "Narrative Medicine — 11" },
       { src: "images/work/narrative-medicine-12.jpg", title: "Narrative Medicine — 12" },

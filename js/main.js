@@ -88,7 +88,9 @@
     const item = deckItems[deckIndex];
     deckStage.innerHTML = "";
 
-    if (item.hotspots && item.hotspots.length) {
+    if (item.type === "panorama") {
+      deckStage.appendChild(buildPanorama(item));
+    } else if (item.hotspots && item.hotspots.length) {
       deckStage.appendChild(buildPanel(item));
     } else {
       const img = document.createElement("img");
@@ -98,6 +100,40 @@
     }
 
     deckCounter.textContent = `${deckIndex + 1} / ${deckItems.length}`;
+  }
+
+  // Resolves once an <img>'s natural size is known.
+  function whenReady(img) {
+    if (img.complete && img.naturalWidth) return Promise.resolve();
+    return new Promise((resolve) => {
+      img.addEventListener("load", resolve, { once: true });
+      img.addEventListener("error", resolve, { once: true });
+    });
+  }
+
+  // The deck frame is a fixed 16:9 box and photos are shown with
+  // object-fit:contain, so most images are letterboxed (pillarboxed) inside
+  // it rather than filling it edge to edge. This returns, in real pixels,
+  // where the actual visible photo sits within the frame.
+  function getContainRect(frame, img) {
+    const frameW = frame.clientWidth;
+    const frameH = frame.clientHeight;
+    const frameRatio = frameW / frameH;
+    const imgRatio = img.naturalWidth / img.naturalHeight;
+    let renderedW, renderedH;
+    if (imgRatio > frameRatio) {
+      renderedW = frameW;
+      renderedH = frameW / imgRatio;
+    } else {
+      renderedH = frameH;
+      renderedW = frameH * imgRatio;
+    }
+    return {
+      offsetX: (frameW - renderedW) / 2,
+      offsetY: (frameH - renderedH) / 2,
+      renderedW,
+      renderedH,
+    };
   }
 
   function buildPanel(item) {
@@ -110,30 +146,95 @@
     base.alt = item.title;
     frame.appendChild(base);
 
-    item.hotspots.forEach((h) => {
-      const d = Math.max(h.w, h.h); // circular porthole diameter, as a fraction of the frame
+    whenReady(base).then(() => {
+      const rect = getContainRect(frame, base);
 
-      const hotspot = document.createElement("div");
-      hotspot.className = "panel-hotspot";
-      hotspot.style.left = `${(h.cx - d / 2) * 100}%`;
-      hotspot.style.top = `${(h.cy - d / 2) * 100}%`;
-      hotspot.style.width = `${d * 100}%`;
-      hotspot.style.height = `${d * 100}%`;
-      hotspot.setAttribute("tabindex", "0");
-      hotspot.setAttribute("aria-label", "Reveal color");
+      // cap each hotspot's diameter (as a fraction of the photo's own size)
+      // so it never overlaps a sibling hotspot or spills past the photo edge
+      const diameters = item.hotspots.map((h) => {
+        let d = Math.min(Math.max(h.w, h.h), 0.6);
+        item.hotspots.forEach((other) => {
+          if (other === h) return;
+          const dist = Math.hypot(h.cx - other.cx, h.cy - other.cy);
+          d = Math.min(d, dist * 0.92);
+        });
+        d = Math.min(d, 2 * Math.min(h.cx, 1 - h.cx, h.cy, 1 - h.cy));
+        return Math.max(d, 0.08);
+      });
 
-      const lens = document.createElement("img");
-      lens.className = "panel-hotspot-img";
-      lens.src = item.src;
-      lens.alt = "";
-      lens.style.width = `${(1 / d) * 100}%`;
-      lens.style.height = `${(1 / d) * 100}%`;
-      lens.style.left = `${-((h.cx - d / 2) / d) * 100}%`;
-      lens.style.top = `${-((h.cy - d / 2) / d) * 100}%`;
-      hotspot.appendChild(lens);
+      item.hotspots.forEach((h, i) => {
+        const d = diameters[i];
+        const diameterPx = d * rect.renderedW;
+        const centerX = rect.offsetX + h.cx * rect.renderedW;
+        const centerY = rect.offsetY + h.cy * rect.renderedH;
+        const leftPx = centerX - diameterPx / 2;
+        const topPx = centerY - diameterPx / 2;
 
-      hotspot.addEventListener("click", () => hotspot.classList.toggle("is-active"));
-      frame.appendChild(hotspot);
+        const hotspot = document.createElement("div");
+        hotspot.className = "panel-hotspot";
+        hotspot.style.left = `${leftPx}px`;
+        hotspot.style.top = `${topPx}px`;
+        hotspot.style.width = `${diameterPx}px`;
+        hotspot.style.height = `${diameterPx}px`;
+        hotspot.setAttribute("tabindex", "0");
+        hotspot.setAttribute("aria-label", "Reveal color");
+
+        // the lens: a full-size color copy of the same photo, offset so the
+        // correct region shows through this circular window
+        const lens = document.createElement("img");
+        lens.className = "panel-hotspot-img";
+        lens.src = item.src;
+        lens.alt = "";
+        lens.style.width = `${rect.renderedW}px`;
+        lens.style.height = `${rect.renderedH}px`;
+        lens.style.left = `${-(leftPx - rect.offsetX)}px`;
+        lens.style.top = `${-(topPx - rect.offsetY)}px`;
+        hotspot.appendChild(lens);
+
+        hotspot.addEventListener("click", () => hotspot.classList.toggle("is-active"));
+        frame.appendChild(hotspot);
+      });
+    });
+
+    return frame;
+  }
+
+  function buildPanorama(item) {
+    const frame = document.createElement("div");
+    frame.className = "panel-frame panorama-frame";
+
+    const base = document.createElement("img");
+    base.className = "panel-base";
+    base.src = item.src;
+    base.alt = item.title;
+    frame.appendChild(base);
+
+    whenReady(base).then(() => {
+      const rect = getContainRect(frame, base);
+
+      item.hotspots.forEach((h) => {
+        const marker = document.createElement("button");
+        marker.className = "panorama-hotspot";
+        marker.style.left = `${rect.offsetX + h.cx * rect.renderedW}px`;
+        marker.style.top = `${rect.offsetY + h.cy * rect.renderedH}px`;
+        marker.setAttribute("aria-label", h.title || "Reveal photo");
+
+        const popup = document.createElement("img");
+        popup.className = "panorama-hotspot-img";
+        popup.src = h.src;
+        popup.alt = h.title || "";
+        marker.appendChild(popup);
+
+        if (h.title) {
+          const label = document.createElement("span");
+          label.className = "panorama-hotspot-label";
+          label.textContent = h.title;
+          marker.appendChild(label);
+        }
+
+        marker.addEventListener("click", () => marker.classList.toggle("is-active"));
+        frame.appendChild(marker);
+      });
     });
 
     return frame;

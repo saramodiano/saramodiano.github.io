@@ -360,14 +360,19 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 }
 .deck-stage {
   position: relative;
+  width: 100%;
+  /* fixed 16:9 (standard slide proportions) — identical frame for every
+     slide, photos letterbox inside it rather than resizing the frame */
+  aspect-ratio: 16 / 9;
   border-radius: 10px;
   overflow: hidden;
-  background: var(--bg-elevated);
+  background: #000;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
 }
-.deck-stage img {
+.deck-stage > img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   display: block;
 }
 .deck-controls {
@@ -399,9 +404,14 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 /* panel-frame: a deck slide with interactive black & white -> color hotspots */
 .panel-frame {
   position: relative;
-  line-height: 0;
+  width: 100%;
+  height: 100%;
 }
 .panel-base {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
   filter: grayscale(1);
 }
 .panel-hotspot {
@@ -436,6 +446,74 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 @media (pointer: coarse) {
   /* no hover on touch — tap toggles via the click handler, so just drop the pulse */
   .panel-hotspot { animation: none; }
+}
+
+/* panorama: a wide B&W base with separate color photos that pop up on hover */
+.panorama-hotspot {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85), 0 2px 14px rgba(0, 0, 0, 0.35);
+  animation: panelPulse 2.6s ease-in-out infinite;
+  transition: width 0.35s var(--ease), height 0.35s var(--ease), border-radius 0.35s var(--ease), box-shadow 0.25s, background-color 0.25s;
+  z-index: 2;
+}
+.panorama-hotspot-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* show the whole photo as composed — never crop it to fill the circle */
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.panorama-hotspot-label {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: #fff;
+  background: var(--ink);
+  padding: 0.3rem 0.7rem;
+  border-radius: 100px;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+.panorama-hotspot:hover,
+.panorama-hotspot:focus-visible,
+.panorama-hotspot.is-active {
+  width: clamp(130px, 28%, 220px);
+  height: clamp(170px, 37%, 290px);
+  border-radius: 10px;
+  background: #0b0b0b;
+  animation: none;
+  box-shadow: 0 0 0 2px var(--accent), 0 14px 34px rgba(0, 0, 0, 0.5);
+}
+.panorama-hotspot:hover .panorama-hotspot-img,
+.panorama-hotspot:focus-visible .panorama-hotspot-img,
+.panorama-hotspot.is-active .panorama-hotspot-img {
+  opacity: 1;
+  transform: scale(1);
+}
+.panorama-hotspot:hover .panorama-hotspot-label,
+.panorama-hotspot:focus-visible .panorama-hotspot-label,
+.panorama-hotspot.is-active .panorama-hotspot-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+@media (pointer: coarse) {
+  .panorama-hotspot { animation: none; }
 }
 
 /* ---------- about ---------- */
